@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jake Scalzo — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #0b1331;
+    --navy: #121c42;
+    --navy-elevated: #182552;
+    --steel: #3b5479;
+    --dusty: #7686a9;
+    --mist: #a3aebe;
+    --text: #eceff5;
+    --text-dim: #a3aebe;
+    --accent: #9fb2e8;
+    --border: rgba(163, 174, 190, 0.16);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy-deep);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.65;
+    position: relative;
+  }
+
+  /* Film-grain texture overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Scroll progress bar */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--dusty), var(--accent));
+    z-index: 300;
+    transition: width 0.08s linear;
+  }
+
+  /* Scroll-reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2.5rem;
+    background: rgba(11, 19, 49, 0.82);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  nav .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 1.05rem;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+
+  nav a {
+    position: relative;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+    padding-bottom: 4px;
+  }
+
+  nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.25s ease;
+  }
+
+  nav a:hover { color: var(--accent); }
+  nav a:hover::after,
+  nav a.active::after { width: 100%; }
+  nav a.active { color: var(--accent); }
+
+  section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 7rem 2rem;
+  }
+
+  /* Hero */
+  #hero {
+    max-width: none;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 70% 20%, rgba(59, 84, 121, 0.35), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 10% 80%, rgba(118, 134, 169, 0.18), transparent 60%),
+      url('assets/images/vision-board.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: normal;
+    opacity: 0.16;
+    z-index: 0;
+  }
+
+  #hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11,19,49,0.2) 0%, var(--navy-deep) 95%);
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-text { flex: 1 1 420px; }
+
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  #hero h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    line-height: 1.08;
+    color: var(--text);
+  }
+
+  #hero .role {
+    margin-top: 0.9rem;
+    font-size: 1.15rem;
+    color: var(--mist);
+  }
+
+  #hero p.tagline {
+    margin-top: 1.4rem;
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 480px;
+  }
+
+  .cta-row {
+    margin-top: 2.2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .btn.primary {
+    background: var(--accent);
+    color: var(--navy-deep);
+  }
+
+  .btn.secondary {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(159, 178, 232, 0.28);
+  }
+
+  .avatar {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--navy-elevated);
+    position: relative;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .avatar-fallback::after {
+    content: "JS";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem;
+    color: var(--mist);
+  }
+
+  /* Section headings */
+  h2.section-title {
+    font-size: 1.9rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  h2.section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  #about p {
+    color: var(--text-dim);
+    max-width: 700px;
+    font-size: 1.05rem;
+  }
+
+  /* Experience timeline — grouped by company, LinkedIn-style */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2.6rem;
+  }
+
+  .company-block { }
+
+  .company-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .org-logo,
+  .org-logo-img {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .org-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    text-align: center;
+  }
+
+  .org-logo-img {
+    background: #f4f5f8;
+    padding: 6px;
+  }
+
+  .org-logo-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .company-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+
+  .company-meta {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-top: 0.15rem;
+  }
+
+  .roles-list {
+    margin-top: 1.2rem;
+    padding-left: calc(44px + 0.9rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  .role-item {
+    border-left: 2px solid var(--border);
+    padding-left: 1.4rem;
+    position: relative;
+  }
+
+  .role-item::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .role-item .role-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .role-item .dates {
+    color: var(--dusty);
+    font-size: 0.82rem;
+    margin-top: 0.15rem;
+  }
+
+  .role-item ul {
+    margin-top: 0.7rem;
+    padding-left: 1.1rem;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+  }
+
+  .role-item li { margin-bottom: 0.35rem; }
+
+  @media (max-width: 640px) {
+    .roles-list { padding-left: 1.2rem; }
+  }
+
+  /* Impact section */
+  .impact-category {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    color: var(--dusty);
+    margin-top: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .impact-category:first-of-type {
+    margin-top: 0;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .impact-card {
+    background: var(--navy-elevated);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .impact-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--dusty);
+    border-left-color: var(--accent);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(159, 178, 232, 0.12);
+  }
+
+  .impact-card .impact-number {
+    font-family: 'Fraunces', serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .impact-card .impact-label {
+    margin-top: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .impact-card .impact-desc {
+    margin-top: 0.8rem;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .inline-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 0.45rem;
+    border-radius: 4px;
+    background: #f4f5f8;
+    padding: 2px;
+    position: relative;
+    top: -1px;
+  }
+
+  /* Projects */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .project-card {
+    background: var(--navy-elevated);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(159, 178, 232, 0.15);
+  }
+
+  .project-media {
+    position: relative;
+    background: #eef0f4;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .project-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.8rem;
+    cursor: zoom-in;
+  }
+
+  .project-media iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(11, 19, 49, 0.55);
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 2;
+  }
+
+  .gallery-arrow:hover { background: rgba(11, 19, 49, 0.85); }
+  .gallery-arrow.prev { left: 10px; }
+  .gallery-arrow.next { right: 10px; }
+
+  .gallery-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.4rem;
+    z-index: 2;
+  }
+
+  .gallery-dots .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(11, 19, 49, 0.35);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .gallery-dots .dot.active { background: var(--navy-deep); }
+
+  .project-body {
+    padding: 1.6rem 1.8rem 1.8rem;
+  }
+
+  .project-client {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-client img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #f4f5f8;
+    padding: 3px;
+  }
+
+  .project-client span {
+    color: var(--dusty);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .project-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.25rem;
+    color: var(--text);
+  }
+
+  .project-desc {
+    margin-top: 0.7rem;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 24, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 3rem;
+  }
+
+  .lightbox.active { display: flex; }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  /* Skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+
+  .skill-chip {
+    background: var(--navy-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+  }
+
+  .skill-chip:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  /* Education */
+  .edu-card {
+    background: var(--navy-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.8rem;
+  }
+
+  .edu-card .school {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+  }
+
+  .edu-card .degree {
+    color: var(--text-dim);
+    margin-top: 0.4rem;
+  }
+
+  .edu-card .dates {
+    color: var(--dusty);
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
+  }
+
+  /* Contact */
+  #contact .links {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  #contact .links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 0.92rem;
+  }
+
+  #contact .links a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .hero-inner { flex-direction: column-reverse; text-align: center; }
+    #hero p.tagline { max-width: 100%; }
+    .cta-row { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<nav>
+  <div class="logo">Jake Scalzo</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow">Marketing · Business Analytics</div>
+      <h1>Jake Scalzo</h1>
+      <p class="tagline">
+        Curiosity fuels my work. Data guides my decisions. Action turns insight into impact.
+      </p>
+      <div class="cta-row">
+        <a href="#experience" class="btn primary">View Experience</a>
+        <a href="#contact" class="btn secondary">Get in Touch</a>
+      </div>
+    </div>
+    <div class="avatar">
+      <img src="assets/images/headshot.png" alt="Jake Scalzo"
+           onerror="this.style.display='none'; this.parentElement.classList.add('avatar-fallback')">
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <h2 class="section-title">About</h2>
+  <p>
+    I'm a marketer who follows the data wherever it leads—from optimizing enterprise email
+    streams to shaping ticketing strategy for professional sports teams and analyzing
+    performance to uncover actionable insights. I care about doing high-quality, efficient
+    work while keeping a smile on my face.
+  </p>
+  <p style="margin-top: 1.2rem;">
+    I'm currently studying Marketing and Business Administration at Gonzaga University,
+    with a concentration in Business Analytics. Alongside school, I work as a STAR intern
+    at SAP and lead Gonzaga Sport Consulting Group as its Managing Director.
+  </p>
+</section>
+
+<section id="experience">
+  <h2 class="section-title">Experience</h2>
+  <div class="timeline" id="timeline"></div>
+</section>
+
+<section id="impact">
+  <h2 class="section-title">Impact & Results</h2>
+
+  <h3 class="impact-category">Demand Generation</h3>
+  <div class="impact-grid" id="impact-grid-demandgen"></div>
+
+  <h3 class="impact-category">GSCG</h3>
+  <div class="impact-grid" id="impact-grid-gscg"></div>
+</section>
+
+<section id="projects">
+  <h2 class="section-title">Selected Projects</h2>
+  <div class="projects-grid" id="projects-grid"></div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<section id="skills">
+  <h2 class="section-title">Skills</h2>
+  <div class="skills-grid" id="skills-grid"></div>
+</section>
+
+<section id="education">
+  <h2 class="section-title">Education</h2>
+  <div class="edu-card">
+    <div class="school">Gonzaga University</div>
+    <div class="degree">B.S. in Marketing and Business Administration, Concentration in Business Analytics</div>
+    <div class="dates">September 2023 – May 2027 (Expected)</div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Contact</h2>
+  <p style="color: var(--text-dim);">Always open to connecting — reach out below.</p>
+  <div class="links">
+    <a href="mailto:jacobscalzo3@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/jake-scalzo/" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  &copy; <span id="year"></span> Jake Scalzo. Built with plain HTML/CSS/JS.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Edit these arrays to update content without touching the layout/CSS above.
+
+  const LOGOS = {
+    sap: { img: "assets/images/logos/sap.webp" },
+    gscg: { img: "assets/images/logos/gscg.jpg" },
+    bellevue: { img: "assets/images/logos/bellevue.jpg" },
+    tam: { img: "assets/images/logos/tam.png" },
+    harvest: { img: "assets/images/logos/harvest.jpg" }
+  };
+
+  const CLIENT_LOGOS = {
+    storm: "assets/images/logos/storm.svg",
+    diamondbacks: "assets/images/logos/diamondbacks.svg",
+    chiefs: "assets/images/logos/chiefs.jpg",
+    seahawks: "assets/images/logos/seahawks.webp",
+    truist: "assets/images/logos/truist.jpg"
+  };
+
+  // Grouped by company, most recent company first — mirrors LinkedIn's layout.
+  const EXPERIENCE = [
+    {
+      company: "SAP",
+      meta: "Internship · 1 yr 3 mos · Bellevue, Washington · On-site",
+      logo: LOGOS.sap,
+      roles: [
+        {
+          title: "STAR Intern — Partner Marketing Go-To-Market Intern",
+          dates: "June 2026 – Present · 3 mos",
+          bullets: []
+        },
+        {
+          title: "STAR Intern — Concur Enterprise Americas Demand Generation Marketing Intern",
+          dates: "June 2025 – June 2026 · 1 yr 1 mo",
+          bullets: [
+            "Audited and analyzed six months of email performance data across 11 personas, identifying email bot inflation within footer click metrics",
+            "Developed recommendations to improve CTA language, subject lines, and email content",
+            "Created 600+ digital banner ads supporting multi-channel marketing campaigns",
+            "Produced a campaign video generating 33,509 impressions and 997 website visits, with a 22% completion rate",
+            "Optimized nurture email streams, increasing click-to-open rate by 18.6% and open rate by 5.2%"
+          ]
+        }
+      ]
+    },
+    {
+      company: "Gonzaga Sport Consulting Group",
+      meta: "3 yrs · Spokane, Washington",
+      logo: LOGOS.gscg,
+      roles: [
+        {
+          title: "Managing Director",
+          dates: "March 2026 – Present · 6 mos",
+          bullets: [
+            "Oversee a team of Directors, managing projects and ensuring teams deliver successful outcomes for clients",
+            "Mentor Directors and the broader group to support their growth within the organization",
+            "Lead development of presentations for the Board of Regents and University Advancement, showcasing GSCG's impact to key university stakeholders",
+            "Building an internal handbook documenting GSCG's processes and best practices for long-term consistency"
+          ]
+        },
+        {
+          title: "Director",
+          dates: "May 2025 – March 2026 · 11 mos",
+          bullets: [
+            "Oversaw two concurrent client consulting projects while managing day-to-day operations to support the group's overall success",
+            "Secured 9 new client engagements, including the Portland Trail Blazers, Seattle Mariners, and San Diego FC",
+            "Provided feedback on student presentations, helping consultants sharpen their PowerPoint visualizations and delivery",
+            "Developed and launched an Associate Program to expand student involvement with clear processes and role definitions"
+          ]
+        },
+        {
+          title: "Consultant — Seattle Storm",
+          clientLogo: CLIENT_LOGOS.storm,
+          dates: "January 2025 – May 2025 · 5 mos",
+          bullets: ["Delivered consulting recommendations on fan engagement and marketing strategy"]
+        },
+        {
+          title: "Consultant — Arizona Diamondbacks",
+          clientLogo: CLIENT_LOGOS.diamondbacks,
+          dates: "September 2024 – December 2024 · 4 mos",
+          bullets: ["Delivered consulting recommendations on Gen Z marketing and sponsorship activation"]
+        },
+        {
+          title: "Consultant — Spokane Chiefs",
+          clientLogo: CLIENT_LOGOS.chiefs,
+          dates: "June 2024 – August 2024 · 3 mos",
+          bullets: ["Delivered consulting recommendations on ticketing strategy and fan engagement"]
+        },
+        {
+          title: "Consultant — Seattle Seahawks",
+          clientLogo: CLIENT_LOGOS.seahawks,
+          dates: "January 2024 – May 2024 · 5 mos",
+          bullets: ["Delivered consulting recommendations on Gen Z marketing and fan engagement"]
+        },
+        {
+          title: "Consultant — Truist Bank",
+          clientLogo: CLIENT_LOGOS.truist,
+          dates: "September 2023 – December 2023 · 4 mos",
+          bullets: ["Conducted market research and consumer analysis to inform client strategy"]
+        }
+      ]
+    },
+    {
+      company: "Bellevue Club",
+      meta: "Part-time · United States · On-site",
+      logo: LOGOS.bellevue,
+      roles: [
+        {
+          title: "Tennis Coach",
+          dates: "June 2022 – June 2025 · 3 yrs 1 mo",
+          bullets: [
+            "Instructed players of all ages and skill levels through private and group lessons",
+            "Developed personalized training plans to improve technical and competitive performance"
+          ]
+        }
+      ]
+    },
+    {
+      company: "Tam O'Shanter Club",
+      meta: "Part-time · On-site",
+      logo: LOGOS.tam,
+      roles: [
+        {
+          title: "Tennis Coach",
+          dates: "June 2020 – May 2022 · 2 yrs",
+          bullets: [
+            "Instructed players of all ages and skill levels through private and group lessons",
+            "Built strong communication and leadership skills through ongoing client relationships"
+          ]
+        }
+      ]
+    },
+    {
+      company: "2nd Harvest",
+      meta: "Spokane, Washington",
+      logo: LOGOS.harvest,
+      roles: [
+        {
+          title: "Volunteer Intern",
+          dates: "August 2024 – January 2025",
+          bullets: [
+            "Supported warehouse operations by organizing inventory and coordinating volunteer assignments",
+            "Assisted with volunteer onboarding and daily workflow management to improve efficiency"
+          ]
+        }
+      ]
+    }
+  ];
+
+  const IMPACT_DEMANDGEN = [
+    {
+      number: "+18.6%",
+      label: "Average nurture email CTOR lift",
+      desc: "Audited six months of email performance data across 11 personas (9 emails each) to identify underperforming streams, then rebuilt them — 13 of 18 streams saw click-to-open gains, averaging +18.6%."
+    },
+    {
+      number: "+5.6%",
+      label: "Average nurture email open rate lift",
+      desc: "11 of 18 nurture streams saw open rate improve after subject line and send-time adjustments informed by the audit."
+    },
+    {
+      number: "-22.5%",
+      label: "Reduction in bot-driven footer clicks",
+      desc: "Identified email bot inflation skewing engagement metrics and adjusted footer link placement to cut false-positive clicks across 15 of 18 streams."
+    },
+    {
+      number: "614+",
+      label: "Digital banner ads created",
+      desc: "Varying in size, color, content, creative, and design to support multi-channel demand generation campaigns."
+    },
+    {
+      number: "33.5K",
+      label: "Campaign video impressions",
+      desc: "Produced a demand gen campaign video that drove 997 website visits with a 22% completion rate."
+    },
+    {
+      number: "401",
+      label: "Paid social ads analyzed",
+      desc: "Reviewed performance across 8 quarters and 6 personas to identify which captions, colors, and creative formats actually converted into leads."
+    }
+  ];
+
+  const IMPACT_GSCG = [
+    {
+      number: "9",
+      label: "New client engagements secured",
+      desc: "As Director of Gonzaga Sport Consulting Group, including the Portland Trail Blazers, Seattle Mariners, and San Diego FC."
+    }
+    // More GSCG highlights coming soon
+  ];
+
+  const SKILLS = [
+    "Marketing Strategy", "Demand Generation", "Market Research", "Data Analysis",
+    "PowerPoint", "Excel", "Canva", "Presentation Design", "Client Outreach",
+    "Synthesia", "Photoshop"
+  ];
+
+  const PROJECTS = [
+    {
+      client: "Spokane Chiefs",
+      clientLogo: CLIENT_LOGOS.chiefs,
+      title: "Customizable Ticket Package",
+      desc: "Designed the concept of a customizable ticket package for Memorial Cup.",
+      media: { type: "video", youtubeId: "cbavhVR1jtM" }
+    },
+    {
+      client: "Truist Bank",
+      clientLogo: CLIENT_LOGOS.truist,
+      title: "Co-Branded Debit Card Concept",
+      desc: "Designed a co-branded debit card concept pairing Truist's Enjoy Cash rewards with a university athletics partnership, as part of a sponsorship activation strategy.",
+      media: { type: "image", images: ["assets/images/projects/truist-debit-card.png"] }
+    },
+    {
+      client: "Seattle Storm",
+      clientLogo: CLIENT_LOGOS.storm,
+      title: "Fan Loyalty Rewards Program",
+      desc: "Designed a fan loyalty program concept — how fans earn points through check-ins, daily logins, referrals, and virtual events, and redeem them in a \"Surge Point Shop\" for tickets, gear, and exclusive experiences.",
+      media: {
+        type: "gallery",
+        images: [
+          "assets/images/projects/storm-rewards-1.png",
+          "assets/images/projects/storm-rewards-2.png",
+          "assets/images/projects/storm-rewards-3.png"
+        ]
+      }
+    }
+  ];
+
+  function renderLogo(logo) {
+    if (logo.img) {
+      return `<div class="org-logo-img"><img src="${logo.img}" alt=""></div>`;
+    }
+    return `<div class="org-logo" style="background:${logo.bg}; color:${logo.color};">${logo.abbr}</div>`;
+  }
+
+  const timeline = document.getElementById('timeline');
+  EXPERIENCE.forEach((company, companyIndex) => {
+    const block = document.createElement('div');
+    block.className = 'company-block reveal';
+    block.style.transitionDelay = `${Math.min(companyIndex, 4) * 60}ms`;
+    block.innerHTML = `
+      <div class="company-header">
+        ${renderLogo(company.logo)}
+        <div>
+          <div class="company-name">${company.company}</div>
+          <div class="company-meta">${company.meta}</div>
+        </div>
+      </div>
+      <div class="roles-list">
+        ${company.roles.map(role => `
+          <div class="role-item">
+            <div class="role-title">${role.clientLogo ? `<img class="inline-logo" src="${role.clientLogo}" alt="">` : ''}${role.title}</div>
+            <div class="dates">${role.dates}</div>
+            ${role.bullets.length ? `<ul>${role.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+    timeline.appendChild(block);
+  });
+
+  function renderImpactGrid(elementId, items) {
+    const grid = document.getElementById(elementId);
+    items.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'impact-card reveal';
+      card.style.transitionDelay = `${Math.min(index, 5) * 70}ms`;
+      card.innerHTML = `
+        <div class="impact-number" data-target="${item.number}">${item.number}</div>
+        <div class="impact-label">${item.label}</div>
+        <div class="impact-desc">${item.desc}</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  renderImpactGrid('impact-grid-demandgen', IMPACT_DEMANDGEN);
+  renderImpactGrid('impact-grid-gscg', IMPACT_GSCG);
+
+  const GALLERIES = {};
+
+  function setGallery(galleryId, index) {
+    const images = GALLERIES[galleryId];
+    const container = document.querySelector(`[data-gallery="${galleryId}"]`);
+    container.dataset.index = index;
+    container.querySelector('img').src = images[index];
+    container.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === index));
+  }
+
+  function shiftGallery(galleryId, delta) {
+    const images = GALLERIES[galleryId];
+    const container = document.querySelector(`[data-gallery="${galleryId}"]`);
+    const current = parseInt(container.dataset.index, 10);
+    setGallery(galleryId, (current + delta + images.length) % images.length);
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('active');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox') closeLightbox();
+  });
+
+  const projectsGrid = document.getElementById('projects-grid');
+  PROJECTS.forEach((project, projectIndex) => {
+    const card = document.createElement('div');
+    card.className = 'project-card reveal';
+    card.style.transitionDelay = `${Math.min(projectIndex, 5) * 90}ms`;
+
+    let mediaHtml = '';
+    if (project.media.type === 'video') {
+      mediaHtml = `
+        <div class="project-media">
+          <iframe src="https://www.youtube.com/embed/${project.media.youtubeId}" title="${project.title}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen></iframe>
+        </div>`;
+    } else if (project.media.type === 'image') {
+      mediaHtml = `
+        <div class="project-media">
+          <img src="${project.media.images[0]}" alt="${project.title}" onclick="openLightbox('${project.media.images[0]}')">
+        </div>`;
+    } else if (project.media.type === 'gallery') {
+      const galleryId = `gallery-${projectIndex}`;
+      GALLERIES[galleryId] = project.media.images;
+      mediaHtml = `
+        <div class="project-media" data-gallery="${galleryId}" data-index="0">
+          <img src="${project.media.images[0]}" alt="${project.title}" onclick="openLightbox(this.src)">
+          <button class="gallery-arrow prev" onclick="shiftGallery('${galleryId}', -1)" aria-label="Previous image">&#8249;</button>
+          <button class="gallery-arrow next" onclick="shiftGallery('${galleryId}', 1)" aria-label="Next image">&#8250;</button>
+          <div class="gallery-dots">
+            ${project.media.images.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" onclick="setGallery('${galleryId}', ${i})"></div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    card.innerHTML = `
+      ${mediaHtml}
+      <div class="project-body">
+        <div class="project-client">
+          <img src="${project.clientLogo}" alt="">
+          <span>${project.client}</span>
+        </div>
+        <div class="project-title">${project.title}</div>
+        <div class="project-desc">${project.desc}</div>
+      </div>
+    `;
+    projectsGrid.appendChild(card);
+  });
+
+  const skillsGrid = document.getElementById('skills-grid');
+  SKILLS.forEach((skill, index) => {
+    const chip = document.createElement('div');
+    chip.className = 'skill-chip reveal';
+    chip.style.transitionDelay = `${Math.min(index, 8) * 40}ms`;
+    chip.textContent = skill;
+    skillsGrid.appendChild(chip);
+  });
+
+  // --- Polish: scroll progress bar, active nav, reveal-on-scroll, count-up ---
+
+  const scrollProgress = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    scrollProgress.style.width = `${pct}%`;
+  }, { passive: true });
+
+  document.querySelectorAll('h2.section-title, .edu-card').forEach(el => el.classList.add('reveal'));
+
+  function animateCount(el) {
+    const raw = el.dataset.target;
+    const match = raw.match(/^([+-]?)(\d+(?:\.\d+)?)(.*)$/);
+    if (!match) return;
+    const sign = match[1];
+    const target = parseFloat(match[2]);
+    const decimals = match[2].includes('.') ? match[2].split('.')[1].length : 0;
+    const suffix = match[3];
+    const duration = 1100;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = `${sign}${(target * eased).toFixed(decimals)}${suffix}`;
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.textContent = raw;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      const number = entry.target.querySelector('.impact-number');
+      if (number && !number.dataset.counted) {
+        number.dataset.counted = 'true';
+        animateCount(number);
+      }
+      revealObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  const navLinks = document.querySelectorAll('nav a');
+  const navSections = Array.from(navLinks)
+    .map(link => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = `#${entry.target.id}`;
+      const link = document.querySelector(`nav a[href="${id}"]`);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+
+  navSections.forEach(section => navObserver.observe(section));
+</script>
+
+</body>
+</html>
